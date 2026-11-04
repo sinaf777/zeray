@@ -78,7 +78,7 @@ const MEMBER = {
   region: 'Tigray',
   country: 'Ethiopia',
   occupation: 'Lawyer',
-  registeredOn: '23 October 2026',
+  registeredOn: '3 November 2026',
 }
 
 const COMPLETED_STEPS = ONBOARDING_STEPS.filter((s) => s.status === 'done')
