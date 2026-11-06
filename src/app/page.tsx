@@ -376,7 +376,7 @@ function DashboardView({ onSignOut }: { onSignOut: () => void }) {
             </p>
 
             <h2 className="mt-3 text-3xl font-bold">
-              Complete Your Payment
+              We will complete your payment in 
             </h2>
 
             <div className="mt-6 flex justify-center gap-3">
