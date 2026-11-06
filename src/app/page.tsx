@@ -252,6 +252,9 @@ function DashboardView({ onSignOut }: { onSignOut: () => void }) {
     return () => clearInterval(interval)
   }, [])
 
+  const deadlineExpired =
+    timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0
+
   return (
     <>
       <header className="border-b border-stone-200 bg-white">
@@ -366,6 +369,44 @@ function DashboardView({ onSignOut }: { onSignOut: () => void }) {
           </Card>
         </section>
 
+        <Card className="border-2 border-amber-400 bg-gradient-to-br from-gray-950 to-gray-800 text-white">
+          <CardContent className="p-6 text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-amber-400">
+              Payment Deadline
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold">
+              Complete Your Payment
+            </h2>
+
+            <div className="mt-6 flex justify-center gap-3">
+              {[
+                { label: 'Hours', value: timeLeft.hours },
+                { label: 'Minutes', value: timeLeft.minutes },
+                { label: 'Seconds', value: timeLeft.seconds },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="min-w-[85px] rounded-xl bg-white/10 p-4"
+                >
+                  <div className="text-4xl font-black tabular-nums text-amber-400">
+                    {String(item.value).padStart(2, '0')}
+                  </div>
+                  <div className="mt-1 text-xs uppercase text-gray-300">
+                    {item.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-5 text-sm text-gray-300" aria-live="polite">
+              {deadlineExpired
+                ? 'Payment deadline has expired.'
+                : 'Time remaining until the payment deadline.'}
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Next steps */}
         <Card className="animate-in fade-in slide-in-from-bottom-2 duration-500">
           <CardHeader>
@@ -382,13 +423,8 @@ function DashboardView({ onSignOut }: { onSignOut: () => void }) {
                   aria-hidden="true"
                 />
                 <div className="text-sm text-stone-700">
-                  <p>
-                    The membership office will contact you with the date and details
-                    of the sacrifice payment of 2666 Birr that will be needed from you.
-                  </p>
-                  <p className="mt-1 font-medium text-amber-700" aria-live="polite">
-                    Time remaining: {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-                  </p>
+                  The membership office will contact you with the date and details
+                  of the sacrifice payment of 2666 Birr that will be needed from you.
                 </div>
               </li>
               <li className="flex items-start gap-3">
