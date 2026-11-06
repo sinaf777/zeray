@@ -57,7 +57,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     title: 'Membership registration',
     description: 'Registration completed successfully.',
-    status: 'current',
+    status: 'done',
     weight: 26,
   },
   {
