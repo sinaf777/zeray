@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   AlertCircle,
   BadgeCheck,
@@ -218,7 +218,40 @@ function StepRow({ step, index }: { step: OnboardingStep; index: number }) {
 }
 
 function DashboardView({ onSignOut }: { onSignOut: () => void }) {
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 48,
+    minutes: 0,
+    seconds: 0,
+  })
   const doneCount = COMPLETED_STEPS.length
+
+  useEffect(() => {
+    // Replace with a real deadline returned by your backend.
+    let deadline = localStorage.getItem('paymentDeadline')
+
+    if (!deadline) {
+      deadline = String(Date.now() + 48 * 60 * 60 * 1000)
+      localStorage.setItem('paymentDeadline', deadline)
+    }
+
+    const endTime = Number(deadline)
+
+    const updateCountdown = () => {
+      const remaining = Math.max(0, endTime - Date.now())
+
+      setTimeLeft({
+        hours: Math.floor(remaining / (1000 * 60 * 60)),
+        minutes: Math.floor((remaining / (1000 * 60)) % 60),
+        seconds: Math.floor((remaining / 1000) % 60),
+      })
+    }
+
+    updateCountdown()
+    const interval = setInterval(updateCountdown, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <>
       <header className="border-b border-stone-200 bg-white">
@@ -348,10 +381,15 @@ function DashboardView({ onSignOut }: { onSignOut: () => void }) {
                   className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
                   aria-hidden="true"
                 />
-                <p className="text-sm text-stone-700">
-                  The membership office will contact you with the date and details
-                  of the sacrifice payment of 2666 Birr that will be needed from you.
-                </p>
+                <div className="text-sm text-stone-700">
+                  <p>
+                    The membership office will contact you with the date and details
+                    of the sacrifice payment of 2666 Birr that will be needed from you.
+                  </p>
+                  <p className="mt-1 font-medium text-amber-700" aria-live="polite">
+                    Time remaining: {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+                  </p>
+                </div>
               </li>
               <li className="flex items-start gap-3">
                 <BadgeCheck
